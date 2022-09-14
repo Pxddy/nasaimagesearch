@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">NasaImageSearch</string>
+
+    <!-- NasaImageSearchDetailsScreen -->
+    <string name="image_overview_screen_search_placeholder">Search images…</string>
+    <string name="image_overview_screen_search_placeholder_no_connection">"Looks like you're offline"</string>
+
+    <string name="image_overview_screen_error_button_text">@string/error_view_generic_error_button_text</string>
+
+    <string name="image_overview_screen_search_empty_list_view_title">No Results</string>
+    <string name="image_overview_screen_search_empty_list_view_body">"Couldn't find any images for the search term '%1$s'"</string>
+
+    <!-- NasaImageSearchDetailsScreen -->
+    <string name="image_details_screen_topbar_title">Image Details</string>
+    <string name="image_details_screen_topbar_navigation_icon_contentDescription">Back arrow</string>
+
+    <string name="image_details_screen_error_button_text">Go back</string>
+
+    <string name="image_details_screen_data_photographed">Photographed by:</string>
+    <string name="image_details_screen_data_location">Location:</string>
+    <string name="image_details_screen_data_date">Date created:</string>
+    <string name="image_details_screen_data_description">Description:</string>
+
+    <!-- ErrorView -->
+    <string name="error_view_generic_error_info">Something went wrong!</string>
+    <string name="error_view_generic_error_button_text">Retry</string>
+
+    <!-- LoadingView -->
+    <string name="loading_view_generic_loading_info">Loading data…</string>
 </resources>

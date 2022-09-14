@@ -1,4 +1,4 @@
-package com.ph.nasaimagesearch.common.network
+package com.ph.nasaimagesearch.common.network.state
 
 data class NetworkState(
     val isConnected: Boolean,

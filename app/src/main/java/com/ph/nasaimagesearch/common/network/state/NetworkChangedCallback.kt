@@ -1,4 +1,4 @@
-package com.ph.nasaimagesearch.common.network
+package com.ph.nasaimagesearch.common.network.state
 
 import android.net.ConnectivityManager
 import android.net.LinkProperties

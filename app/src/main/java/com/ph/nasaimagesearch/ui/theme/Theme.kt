@@ -59,9 +59,9 @@ fun NasaImageSearchTheme(
         checkNotNull(currentWindow) { "Not in an activity - unable to get Window reference" }
 
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
+            currentWindow.statusBarColor = colorScheme.background.toArgb()
             WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars =
-                darkTheme
+                !darkTheme
         }
     }
 
