@@ -99,7 +99,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.6.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
@@ -118,7 +118,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.8")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
 
     // Hilt
     val hilt = "2.43.2"
