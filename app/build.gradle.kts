@@ -105,7 +105,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.2.1")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
     // Compose Destination
     val composeDestination = "1.7.21-beta"
