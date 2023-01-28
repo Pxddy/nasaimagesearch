@@ -127,7 +127,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
 
     // Lifecycle
-    val lifecycle = "2.6.0-alpha02"
+    val lifecycle = "2.6.0-alpha05"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
