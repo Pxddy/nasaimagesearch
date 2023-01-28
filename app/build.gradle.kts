@@ -121,7 +121,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
 
     // Hilt
-    val hilt = "2.43.2"
+    val hilt = "2.44.2"
 
     implementation("com.google.dagger:hilt-android:$hilt")
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
