@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.ph.nasaimagesearch.R
@@ -26,7 +25,7 @@ import com.ph.nasaimagesearch.ui.theme.Typography
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination(navArgsDelegate = NasaImageSearchDetailsNavArgs::class)
 @Composable
 fun NasaImageSearchDetailsScreen(

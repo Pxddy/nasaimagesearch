@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -6,8 +8,6 @@ plugins {
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
 }
-
-val composeVersion = "1.3.3"
 
 android {
     compileSdk = 33
@@ -43,8 +43,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    java{
+        toolchain{
+            languageVersion.set(JavaLanguageVersion.of(JavaVersion.VERSION_11.toString()))
+        }
+    }
+
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        options.jvmTarget.set(JvmTarget.JVM_11)
 
         freeCompilerArgs = freeCompilerArgs + listOf(
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
@@ -69,7 +75,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
 
     packagingOptions {
@@ -89,6 +95,9 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
 
+    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
     implementation(platform("androidx.compose:compose-bom:2023.01.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material")
@@ -100,9 +109,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
