@@ -8,19 +8,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import coil.compose.AsyncImage
 import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.ui.composables.ErrorButtonAction
 import com.ph.nasaimagesearch.ui.composables.ErrorView
 import com.ph.nasaimagesearch.ui.composables.LoadingView
-import com.ph.nasaimagesearch.ui.composables.observeWithLifecycle
 import com.ph.nasaimagesearch.ui.theme.Typography
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -33,8 +35,13 @@ fun NasaImageSearchDetailsScreen(
     viewModel: NasaImageSearchDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    viewModel.events.observeWithLifecycle { handleEvent(event = it, navigator = navigator) }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.events
+            .flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { handleEvent(event = it, navigator = navigator) }
+    }
 
     Scaffold(
         topBar = { topAppBar(viewModel::onNavigateBack) },
