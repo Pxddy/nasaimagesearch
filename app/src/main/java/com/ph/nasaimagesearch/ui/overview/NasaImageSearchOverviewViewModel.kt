@@ -8,9 +8,8 @@ import com.ph.nasaimagesearch.common.coroutines.dispatcher.DispatcherProvider
 import com.ph.nasaimagesearch.common.network.state.NetworkStateProvider
 import com.ph.nasaimagesearch.core.NasaImageSearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.plus
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -28,7 +27,10 @@ class NasaImageSearchOverviewViewModel @Inject constructor(
         initialValue = ""
     )
 
-    val uiState = combine(queryFlow, networkStateProvider.networkState) { query, networkState ->
+    val uiState = combine(
+        queryFlow,
+        networkStateProvider.networkState
+    ) { query, networkState ->
         UiState(
             searchQuery = query,
             isConnected = networkState.isConnected
@@ -53,7 +55,7 @@ class NasaImageSearchOverviewViewModel @Inject constructor(
 
     data class UiState(
         val searchQuery: String = "",
-        val isConnected: Boolean = false
+        val isConnected: Boolean = true
     )
 }
 

@@ -17,12 +17,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,14 +37,15 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.core.model.NasaImage
-import com.ph.nasaimagesearch.ui.composables.ErrorView
-import com.ph.nasaimagesearch.ui.composables.LoadingView
+import com.ph.nasaimagesearch.ui.composables.*
+import com.ph.nasaimagesearch.ui.composables.util.clearFocusOnKeyboardClosed
+import com.ph.nasaimagesearch.ui.composables.util.restoreKeyboardAfterRotation
 import com.ph.nasaimagesearch.ui.destinations.NasaImageSearchDetailsScreenDestination
 import com.ph.nasaimagesearch.ui.theme.Typography
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RootNavGraph(start = true)
@@ -93,7 +94,11 @@ private fun SearchBar(
     onSearchQuery: (String) -> Unit,
     isConnected: Boolean
 ) {
-    val query = rememberSaveable { mutableStateOf("") }
+
+    var query by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(""))
+    }
+
     val focusManager = LocalFocusManager.current
 
     val (placeholderRes, leadingIconVector) = when (isConnected) {
@@ -102,8 +107,8 @@ private fun SearchBar(
     }
 
     OutlinedTextField(
-        value = query.value,
-        onValueChange = { query.value = it },
+        value = if (isConnected) query else TextFieldValue(""),
+        onValueChange = { query = it },
         enabled = isConnected,
         leadingIcon = {
             Icon(imageVector = leadingIconVector, contentDescription = null)
@@ -117,7 +122,7 @@ private fun SearchBar(
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
-                onSearchQuery(query.value)
+                onSearchQuery(query.text)
                 focusManager.clearFocus()
             }
         ),
@@ -126,6 +131,8 @@ private fun SearchBar(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(id = R.dimen.small_spacing))
+            .clearFocusOnKeyboardClosed()
+            .restoreKeyboardAfterRotation()
     )
 }
 
