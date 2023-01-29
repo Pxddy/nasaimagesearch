@@ -43,8 +43,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    java{
-        toolchain{
+    java {
+        toolchain {
             languageVersion.set(JavaLanguageVersion.of(JavaVersion.VERSION_11.toString()))
         }
     }
@@ -142,7 +142,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
 
     // Lottie
-    implementation( "com.airbnb.android:lottie-compose:5.2.0")
+    implementation("com.airbnb.android:lottie-compose:5.2.0")
 
     // Moshi
     val moshi = "1.14.0"
