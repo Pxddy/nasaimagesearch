@@ -12,6 +12,8 @@ plugins {
 android {
     compileSdk = 33
 
+    namespace = "com.ph.nasaimagesearch"
+
     defaultConfig {
         applicationId = "com.ph.nasaimagesearch"
         minSdk = 21
@@ -116,7 +118,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.2.2")
 
     // Compose Destination
-    val composeDestination = "1.7.21-beta"
+    val composeDestination = "1.8.33-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestination")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestination")
 
