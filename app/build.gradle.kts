@@ -105,7 +105,6 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.activity:activity-compose:1.6.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -137,11 +136,12 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
 
     // Lifecycle
-    val lifecycle = "2.6.0-rc01"
+    val lifecycle = "2.6.0"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:6.0.0")
