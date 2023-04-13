@@ -77,10 +77,10 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.5"
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
     }
 
@@ -117,7 +117,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.3.0")
 
     // Compose Destination
-    val composeDestination = "1.8.33-beta"
+    val composeDestination = "1.8.39-beta"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestination")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestination")
 
