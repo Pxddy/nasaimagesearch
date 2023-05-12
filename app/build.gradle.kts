@@ -147,7 +147,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.0")
 
     // Moshi
-    val moshi = "1.14.0"
+    val moshi = "1.15.0"
 
     implementation("com.squareup.moshi:moshi:$moshi")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi")
