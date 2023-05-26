@@ -158,7 +158,7 @@ dependencies {
     val paging = "3.1.1"
 
     implementation("androidx.paging:paging-runtime:$paging")
-    implementation("androidx.paging:paging-compose:1.0.0-alpha19")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha20")
 
     // Retrofit
     val retrofit = "2.9.0"
