@@ -118,7 +118,7 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestination")
 
     // Coroutines
-    val coroutines = "1.7.1"
+    val coroutines = "1.7.2"
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
