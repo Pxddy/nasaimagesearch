@@ -49,12 +49,12 @@ class NasaImageSearchDetailsViewModel @Inject constructor(
     }
 
     sealed interface Event {
-        object NavigateBack : Event
+        data object NavigateBack : Event
     }
 
     sealed interface UiState {
-        object Loading : UiState
-        object Error : UiState
+        data object Loading : UiState
+        data object Error : UiState
         data class Success(
             val title: String,
             val imageUrl: String,

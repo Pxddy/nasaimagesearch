@@ -27,7 +27,6 @@ import com.ph.nasaimagesearch.ui.theme.Typography
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination(navArgsDelegate = NasaImageSearchDetailsNavArgs::class)
 @Composable
 fun NasaImageSearchDetailsScreen(
