@@ -19,6 +19,6 @@ object MoshiModule {
 
     @Reusable
     @Provides
-    fun Moshi.provideMoshiConverterFactory(): MoshiConverterFactory = MoshiConverterFactory
-        .create(this)
+    fun moshiConverterFactory(moshi: Moshi): MoshiConverterFactory = MoshiConverterFactory
+        .create(moshi)
 }

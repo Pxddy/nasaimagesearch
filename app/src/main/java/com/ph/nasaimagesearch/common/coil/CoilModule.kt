@@ -13,5 +13,5 @@ interface CoilModule {
 
     @Binds
     @IntoSet
-    fun CoilInitializer.bind(): Initializable
+    fun coilInitializer(coilInitializer: CoilInitializer): Initializable
 }

@@ -3,21 +3,20 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     namespace = "com.ph.nasaimagesearch"
 
     defaultConfig {
         applicationId = "com.ph.nasaimagesearch"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
 
@@ -63,17 +62,12 @@ android {
         enableAggregatingTask = true
     }
 
-    kapt {
-        // Recommended for Hilt
-        correctErrorTypes = true
-    }
-
     buildFeatures {
         compose = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     packaging {
@@ -126,10 +120,10 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
     // Hilt
-    val hilt = "2.47"
+    val hilt = "2.48"
 
     implementation("com.google.dagger:hilt-android:$hilt")
-    kapt("com.google.dagger:hilt-android-compiler:$hilt")
+    ksp("com.google.dagger:hilt-android-compiler:$hilt")
 
     // Lifecycle
     val lifecycle = "2.6.1"

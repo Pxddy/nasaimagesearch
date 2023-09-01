@@ -14,10 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 @InstallIn(SingletonComponent::class)
 interface CoroutinesModule {
 
-    @get:Binds
-    val DefaultDispatcherProvider.bindDispatcherProvider: DispatcherProvider
+    @Binds
+    fun dispatcherProvider(defaultDispatcherProvider: DefaultDispatcherProvider): DispatcherProvider
 
     @AppScope
     @Binds
-    fun ApplicationCoroutineScope.bindCoroutineScope(): CoroutineScope
+    fun coroutineScope(applicationCoroutineScope: ApplicationCoroutineScope): CoroutineScope
 }
