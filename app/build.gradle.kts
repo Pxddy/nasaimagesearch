@@ -85,7 +85,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.12.0")
 
     val composeBom = platform("androidx.compose:compose-bom:2023.09.01")
     implementation(composeBom)
