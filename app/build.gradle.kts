@@ -85,7 +85,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.12.0")
 
     val composeBom = platform("androidx.compose:compose-bom:2023.09.01")
     implementation(composeBom)
@@ -126,7 +126,7 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:$hilt")
 
     // Lifecycle
-    val lifecycle = "2.6.1"
+    val lifecycle = "2.6.2"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
@@ -149,10 +149,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Paging
-    val paging = "3.2.0"
+    val paging = "3.2.1"
 
     implementation("androidx.paging:paging-runtime:$paging")
-    implementation("androidx.paging:paging-compose:3.2.0")
+    implementation("androidx.paging:paging-compose:$paging")
 
     // Retrofit
     val retrofit = "2.9.0"
