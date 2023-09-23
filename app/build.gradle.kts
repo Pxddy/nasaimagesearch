@@ -149,7 +149,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     // Paging
-    val paging = "3.2.0"
+    val paging = "3.2.1"
 
     implementation("androidx.paging:paging-runtime:$paging")
     implementation("androidx.paging:paging-compose:3.2.0")
