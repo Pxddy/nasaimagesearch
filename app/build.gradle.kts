@@ -143,7 +143,7 @@ dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi")
 
     // Navigation
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
