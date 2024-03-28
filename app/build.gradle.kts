@@ -155,7 +155,7 @@ dependencies {
     implementation("androidx.paging:paging-compose:$paging")
 
     // Retrofit
-    val retrofit = "2.10.0"
+    val retrofit = "2.11.0"
 
     implementation("com.squareup.retrofit2:retrofit:$retrofit")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit")
