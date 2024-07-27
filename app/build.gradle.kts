@@ -125,7 +125,7 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:$hilt")
 
     // Lifecycle
-    val lifecycle = "2.8.3"
+    val lifecycle = "2.8.4"
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
