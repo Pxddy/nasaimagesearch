@@ -133,7 +133,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
 
     // Lottie
-    implementation("com.airbnb.android:lottie-compose:6.5.0")
+    implementation("com.airbnb.android:lottie-compose:6.5.2")
 
     // Moshi
     val moshi = "1.15.1"
