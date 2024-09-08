@@ -180,9 +180,17 @@ private fun LazyPagingItems<NasaImage>.show(navigator: DestinationsNavigator) {
     val imageListItems = this
     val space = dimensionResource(id = R.dimen.tiny_spacing)
 
+    val layoutDirection = LocalLayoutDirection.current
+    val displayCutout = WindowInsets.displayCutout.asPaddingValues()
+    val startPadding = displayCutout.calculateStartPadding(layoutDirection)
+    val endPadding = displayCutout.calculateEndPadding(layoutDirection)
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(horizontal = space),
+        contentPadding = PaddingValues(
+            start = startPadding.coerceAtLeast(space),
+            end = endPadding.coerceAtLeast(space)
+        ),
         horizontalArrangement = Arrangement.spacedBy(space),
         verticalArrangement = Arrangement.spacedBy(space)
     ) {
