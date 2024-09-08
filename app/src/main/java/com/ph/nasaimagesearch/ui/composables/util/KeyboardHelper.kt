@@ -8,7 +8,6 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -67,16 +66,4 @@ fun Modifier.restoreKeyboardAfterRotation(
 
     onFocusChanged { hasFocus = it.hasFocus }
         .focusRequester(focusRequester)
-}
-
-fun Modifier.clearFocusOnKeyboardClosed(): Modifier = composed {
-    val focusManager = LocalFocusManager.current
-    val isKeyboardOpen by isKeyboardOpen()
-    var hasFocus by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = isKeyboardOpen) {
-        if (hasFocus && !isKeyboardOpen) focusManager.clearFocus()
-    }
-
-    onFocusChanged { hasFocus = it.hasFocus }
 }

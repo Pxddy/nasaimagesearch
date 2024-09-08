@@ -1,6 +1,9 @@
 package com.ph.nasaimagesearch.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -9,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
@@ -38,7 +42,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.core.model.NasaImage
 import com.ph.nasaimagesearch.ui.composables.*
-import com.ph.nasaimagesearch.ui.composables.util.clearFocusOnKeyboardClosed
 import com.ph.nasaimagesearch.ui.composables.util.restoreKeyboardAfterRotation
 import com.ph.nasaimagesearch.ui.destinations.NasaImageSearchDetailsScreenDestination
 import com.ph.nasaimagesearch.ui.theme.Typography
@@ -97,7 +100,7 @@ private fun SearchBar(
         mutableStateOf(TextFieldValue(""))
     }
 
-    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val (placeholderRes, leadingIconVector) = when (isConnected) {
         true -> R.string.image_overview_screen_search_placeholder to Icons.Default.Search
@@ -111,6 +114,23 @@ private fun SearchBar(
         leadingIcon = {
             Icon(imageVector = leadingIconVector, contentDescription = null)
         },
+        trailingIcon = {
+            AnimatedVisibility(
+                visible = query.text.isNotEmpty(),
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                IconButton(onClick = {
+                    keyboardController?.hide()
+                    query = TextFieldValue()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = null
+                    )
+                }
+            }
+        },
         placeholder = {
             Text(text = stringResource(id = placeholderRes))
         },
@@ -120,8 +140,8 @@ private fun SearchBar(
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
+                keyboardController?.hide()
                 onSearchQuery(query.text)
-                focusManager.clearFocus()
             }
         ),
         singleLine = true,
@@ -129,7 +149,6 @@ private fun SearchBar(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(id = R.dimen.small_spacing))
-            .clearFocusOnKeyboardClosed()
             .restoreKeyboardAfterRotation()
     )
 }
@@ -150,6 +169,7 @@ private fun ImageGrid(
         refresh is LoadState.Error -> ErrorView(
             errorButtonText = stringResource(id = R.string.image_overview_screen_error_button_text)
         ) { imageListItems.retry() }
+
         refresh is LoadState.NotLoading && isEmpty -> EmptyListView(searchQuery)
         refresh is LoadState.NotLoading -> imageListItems.show(navigator)
     }
