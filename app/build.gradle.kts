@@ -106,7 +106,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Compose Destination
-    val composeDestination = "1.11.8"
+    val composeDestination = "1.11.9"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestination")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestination")
 
