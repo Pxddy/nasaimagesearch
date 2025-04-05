@@ -7,9 +7,9 @@ import android.net.NetworkRequest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.net.ConnectivityManagerCompat
+import com.ph.nasaimagesearch.common.coroutines.AppScope
 import com.ph.nasaimagesearch.common.coroutines.dispatcher.DispatcherProvider
 import com.ph.nasaimagesearch.common.coroutines.flow.shareLatest
-import com.ph.nasaimagesearch.common.coroutines.scope.AppScope
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
