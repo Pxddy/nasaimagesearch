@@ -125,9 +125,4 @@ dependencies {
     val composeDestination = "1.11.9"
     implementation("io.github.raamcosta.compose-destinations:core:$composeDestination")
     ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestination")
-
-    // Moshi
-    val moshi = "1.15.2"
-    implementation("com.squareup.moshi:moshi:$moshi")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi")
 }

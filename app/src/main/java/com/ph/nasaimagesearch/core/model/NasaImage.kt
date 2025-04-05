@@ -1,15 +1,15 @@
 package com.ph.nasaimagesearch.core.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class NasaImage(
-   val id: String,
-   val title: String,
-   val photographer: String?,
-   val location: String?,
-   val description: String?,
-   val dateCreated: String,
-   val imageUrl: String
-) : Parcelable
+    @SerialName("id") val id: String,
+    @SerialName("title") val title: String,
+    @SerialName("photographer") val photographer: String?,
+    @SerialName("location") val location: String?,
+    @SerialName("description") val description: String?,
+    @SerialName("date_created") val dateCreated: String,
+    @SerialName("image_url") val imageUrl: String,
+)
