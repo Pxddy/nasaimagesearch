@@ -29,11 +29,11 @@ class NasaImageSearchOverviewViewModel @Inject constructor(
 
     val uiState = combine(
         queryFlow,
-        networkStateProvider.networkState
-    ) { query, networkState ->
+        networkStateProvider.isOnline
+    ) { query, isOnline ->
         UiState(
             searchQuery = query,
-            isConnected = networkState.isConnected
+            isConnected = isOnline
         )
     }
         .stateIn(

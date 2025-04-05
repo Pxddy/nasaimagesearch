@@ -2,114 +2,77 @@ package com.ph.nasaimagesearch.common.network.state
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.core.net.ConnectivityManagerCompat
 import com.ph.nasaimagesearch.common.coroutines.AppScope
-import com.ph.nasaimagesearch.common.coroutines.dispatcher.DispatcherProvider
-import com.ph.nasaimagesearch.common.coroutines.flow.shareLatest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.plus
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.plus
+import kotlin.time.Duration
 
 @Singleton
 class NetworkStateProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     @AppScope appScope: CoroutineScope,
-    dispatcherProvider: DispatcherProvider
 ) {
 
-    // System services are cached in context
-    private val connectivityManager: ConnectivityManager
-        get() = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val desiredNetworkCapability = NetworkCapabilities.NET_CAPABILITY_VALIDATED
 
-    val networkState: Flow<NetworkState> = callbackFlow {
-        suspend fun sendNetworkState() = send(createNetworkState())
+    val isOnline: Flow<Boolean> = callbackFlow {
+        val connectivityManager = checkNotNull(context.getSystemService(ConnectivityManager::class.java)) {
+            "ConnectivityManager service missing"
+        }
+        val networks = MutableStateFlow(value = connectivityManager.filterActiveNetworksByCapability())
 
-        // Send initial state
-        sendNetworkState()
+        networks
+            .onEach { send(element = it) }
+            .launchIn(scope = this)
 
-        val callback = NetworkChangedCallback().also { networkChanged ->
-            networkChanged.networkChanged
-                .onEach { sendNetworkState() }
-                .catch { Timber.e(it, "Network changed callback failed") }
-                .launchIn(this)
+        val callback = object : ConnectivityManager.NetworkCallback() {
+
+            override fun onAvailable(network: Network) {
+                Timber.v("onAvailable: $network")
+                networks.update { it + network }
+            }
+
+            override fun onLost(network: Network) {
+                Timber.v("onLost: $network")
+                networks.update { it - network }
+            }
         }
 
         val request = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addCapability(desiredNetworkCapability)
             .build()
 
-        try {
-            connectivityManager.registerNetworkCallback(request, callback)
-            Timber.d("Registered %s", callback)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to register network callback=%s", callback)
-            val fallback = NetworkState(isConnected = true, isMetered = true)
-            trySend(fallback)
-        }
+        connectivityManager.registerNetworkCallback(request, callback)
+        Timber.v("NetworkCallback registered")
 
         awaitClose {
-            Timber.d("Removing network callback %s", callback)
             connectivityManager.unregisterNetworkCallback(callback)
-        }
-    }.shareLatest(scope = appScope + dispatcherProvider.IO)
-
-    private fun createNetworkState() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        networkState()
-    } else {
-        legacyNetworkState()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun networkState(): NetworkState {
-        Timber.v("networkState()")
-        val activeNetwork = connectivityManager.activeNetwork
-        val capabilities = try {
-            connectivityManager.getNetworkCapabilities(activeNetwork)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to get network capabilities")
-            null
-        }
-
-        return NetworkState(
-            isConnected = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED),
-            isMetered = !capabilities.hasCapability(
-                NetworkCapabilities.NET_CAPABILITY_NOT_METERED,
-                default = true
-            )
-        ).also {
-            Timber.v(
-                "Created %s for network=%s with capabilities=%s",
-                it,
-                activeNetwork,
-                capabilities
-            )
+            Timber.v("NetworkCallback unregistered")
         }
     }
+        .onEach { Timber.v("networks: $it") }
+        .map { it.isNotEmpty() }
+        .catch {
+            Timber.e(it)
+            emit(false)
+        }
+        .distinctUntilChanged()
+        .onEach { Timber.v("isOnline: $it") }
+        .shareIn(
+            scope = appScope,
+            started = SharingStarted.WhileSubscribed(replayExpiration = Duration.ZERO),
+        )
 
-    @Suppress("Deprecation")
-    private fun legacyNetworkState(): NetworkState {
-        Timber.v("legacyNetworkState()")
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        val isConnected = activeNetworkInfo?.isConnected ?: false
-        val isMetered = ConnectivityManagerCompat.isActiveNetworkMetered(connectivityManager)
-
-        return NetworkState(
-            isConnected = isConnected,
-            isMetered = isMetered
-        ).also { Timber.v("Created %s for activeNetworkInfo=%s", it, activeNetworkInfo) }
-    }
+    private fun ConnectivityManager.filterActiveNetworksByCapability(): Set<Network> = listOfNotNull(activeNetwork)
+        .filter { getNetworkCapabilities(it)?.hasCapability(desiredNetworkCapability) == true }
+        .toSet()
 }
-
-private fun NetworkCapabilities?.hasCapability(
-    capability: Int,
-    default: Boolean = false
-): Boolean = this?.hasCapability(capability) ?: default
