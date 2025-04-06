@@ -1,6 +1,7 @@
 package com.ph.nasaimagesearch.ui.overview
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -55,6 +56,7 @@ fun NasaImageSearchOverviewScreen(
 
     Scaffold(
         topBar = { topBar() },
+        contentWindowInsets = WindowInsets.statusBars,
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -67,10 +69,10 @@ fun NasaImageSearchOverviewScreen(
             ) {
                 SearchBar(onSearchQuery = viewModel::search, isConnected = uiState.isConnected)
 
-                if (uiState.searchQuery.isNotEmpty()) ImageGrid(
+                ImageGrid(
                     imageList = viewModel.items,
                     onItemClick = onItemClick,
-                    searchQuery = uiState.searchQuery
+                    searchQuery = uiState.searchQuery,
                 )
             }
         }
@@ -117,6 +119,7 @@ private fun SearchBar(
                 IconButton(onClick = {
                     keyboardController?.hide()
                     query = TextFieldValue()
+                    onSearchQuery(query.text)
                 }) {
                     Icon(
                         imageVector = Icons.Default.Clear,
@@ -151,14 +154,17 @@ private fun SearchBar(
 private fun ImageGrid(
     imageList: Flow<PagingData<NasaImage>>,
     onItemClick: (NasaImage) -> Unit,
-    searchQuery: String
+    searchQuery: String,
+    modifier: Modifier = Modifier,
 ) {
     val imageListItems = imageList.collectAsLazyPagingItems()
 
     val refresh = imageListItems.loadState.refresh
     val isEmpty = imageListItems.itemCount == 0
+    val noContent = searchQuery.isEmpty()
 
     when {
+        noContent -> Unit
         refresh is LoadState.Loading -> LoadingView()
         refresh is LoadState.Error -> ErrorView(
             errorButtonText = stringResource(id = R.string.image_overview_screen_error_button_text)
@@ -175,15 +181,17 @@ private fun LazyPagingItems<NasaImage>.show(onItemClick: (NasaImage) -> Unit) {
     val space = dimensionResource(id = R.dimen.tiny_spacing)
 
     val layoutDirection = LocalLayoutDirection.current
-    val displayCutout = WindowInsets.displayCutout.asPaddingValues()
-    val startPadding = displayCutout.calculateStartPadding(layoutDirection)
-    val endPadding = displayCutout.calculateEndPadding(layoutDirection)
+    val insets = WindowInsets.safeDrawing.asPaddingValues()
+    val startPadding = insets.calculateStartPadding(layoutDirection)
+    val endPadding = insets.calculateEndPadding(layoutDirection)
+    val bottomPadding = insets.calculateBottomPadding()
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
             start = startPadding.coerceAtLeast(space),
-            end = endPadding.coerceAtLeast(space)
+            end = endPadding.coerceAtLeast(space),
+            bottom = bottomPadding.coerceAtLeast(space),
         ),
         horizontalArrangement = Arrangement.spacedBy(space),
         verticalArrangement = Arrangement.spacedBy(space)

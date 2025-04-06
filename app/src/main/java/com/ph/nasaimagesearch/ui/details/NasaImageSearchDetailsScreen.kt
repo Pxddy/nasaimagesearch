@@ -84,8 +84,9 @@ private fun content(
 @Composable
 private fun NasaImageSearchDetailsViewModel.UiState.Success.showDetails(modifier: Modifier) {
     Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.tiny_spacing))
     ) {
