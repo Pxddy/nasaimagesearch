@@ -49,20 +49,9 @@ fun NasaImageSearchTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
-    }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        val currentWindow = (view.context as? Activity)?.window
-
-        checkNotNull(currentWindow) { "Not in an activity - unable to get Window reference" }
-
-        SideEffect {
-            currentWindow.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars =
-                !darkTheme
-        }
     }
 
     MaterialTheme(

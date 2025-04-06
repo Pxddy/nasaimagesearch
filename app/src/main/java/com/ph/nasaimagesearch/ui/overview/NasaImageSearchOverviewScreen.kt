@@ -43,18 +43,12 @@ import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.core.model.NasaImage
 import com.ph.nasaimagesearch.ui.composables.*
 import com.ph.nasaimagesearch.ui.composables.util.restoreKeyboardAfterRotation
-import com.ph.nasaimagesearch.ui.destinations.NasaImageSearchDetailsScreenDestination
 import com.ph.nasaimagesearch.ui.theme.Typography
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.*
 
-@RootNavGraph(start = true)
-@Destination
 @Composable
 fun NasaImageSearchOverviewScreen(
-    navigator: DestinationsNavigator,
+    onItemClick: (NasaImage) -> Unit,
     viewModel: NasaImageSearchOverviewViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,7 +69,7 @@ fun NasaImageSearchOverviewScreen(
 
                 if (uiState.searchQuery.isNotEmpty()) ImageGrid(
                     imageList = viewModel.items,
-                    navigator = navigator,
+                    onItemClick = onItemClick,
                     searchQuery = uiState.searchQuery
                 )
             }
@@ -156,7 +150,7 @@ private fun SearchBar(
 @Composable
 private fun ImageGrid(
     imageList: Flow<PagingData<NasaImage>>,
-    navigator: DestinationsNavigator,
+    onItemClick: (NasaImage) -> Unit,
     searchQuery: String
 ) {
     val imageListItems = imageList.collectAsLazyPagingItems()
@@ -171,12 +165,12 @@ private fun ImageGrid(
         ) { imageListItems.retry() }
 
         refresh is LoadState.NotLoading && isEmpty -> EmptyListView(searchQuery)
-        refresh is LoadState.NotLoading -> imageListItems.show(navigator)
+        refresh is LoadState.NotLoading -> imageListItems.show(onItemClick = onItemClick)
     }
 }
 
 @Composable
-private fun LazyPagingItems<NasaImage>.show(navigator: DestinationsNavigator) {
+private fun LazyPagingItems<NasaImage>.show(onItemClick: (NasaImage) -> Unit) {
     val imageListItems = this
     val space = dimensionResource(id = R.dimen.tiny_spacing)
 
@@ -199,13 +193,16 @@ private fun LazyPagingItems<NasaImage>.show(navigator: DestinationsNavigator) {
             key = { imageListItems[it]?.id ?: it }
         ) { index ->
             val item = imageListItems[index]
-            ImageGridItem(item = item, navigator = navigator)
+            ImageGridItem(
+                item = item,
+                onItemClick = onItemClick,
+            )
         }
     }
 }
 
 @Composable
-private fun ImageGridItem(item: NasaImage?, navigator: DestinationsNavigator) {
+private fun ImageGridItem(item: NasaImage?, onItemClick: (NasaImage) -> Unit) {
     val modifier = Modifier
         .fillMaxWidth()
         .aspectRatio(1.778f)
@@ -213,9 +210,7 @@ private fun ImageGridItem(item: NasaImage?, navigator: DestinationsNavigator) {
     if (item != null) {
         AsyncImage(
             model = item.imageUrl,
-            modifier = modifier.clickable {
-                navigator.navigate(NasaImageSearchDetailsScreenDestination(image = item))
-            },
+            modifier = modifier.clickable { onItemClick(item) },
             contentScale = ContentScale.Crop,
             contentDescription = null
         )

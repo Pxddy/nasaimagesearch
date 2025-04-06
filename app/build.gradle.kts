@@ -120,9 +120,4 @@ dependencies {
     implementation(libs.square.retrofit.core)
 
     implementation(libs.timber)
-
-    // Compose Destination
-    val composeDestination = "1.11.9"
-    implementation("io.github.raamcosta.compose-destinations:core:$composeDestination")
-    ksp("io.github.raamcosta.compose-destinations:ksp:$composeDestination")
 }

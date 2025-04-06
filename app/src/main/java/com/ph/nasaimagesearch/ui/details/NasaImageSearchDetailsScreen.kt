@@ -8,47 +8,34 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import coil.compose.AsyncImage
 import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.ui.composables.ErrorButtonAction
 import com.ph.nasaimagesearch.ui.composables.ErrorView
 import com.ph.nasaimagesearch.ui.composables.LoadingView
 import com.ph.nasaimagesearch.ui.theme.Typography
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(navArgsDelegate = NasaImageSearchDetailsNavArgs::class)
 @Composable
 fun NasaImageSearchDetailsScreen(
-    navigator: DestinationsNavigator,
+    onBackClick: () -> Unit,
     viewModel: NasaImageSearchDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.events
-            .flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { handleEvent(event = it, navigator = navigator) }
-    }
 
     Scaffold(
-        topBar = { topAppBar(viewModel::onNavigateBack) },
+        topBar = { topAppBar(onNavigateBackClick = onBackClick) },
         content = {
             content(
                 uiState = uiState,
                 paddingValues = it,
-                errorButtonAction = viewModel::onNavigateBack
+                errorButtonAction = onBackClick
             )
         }
     )
@@ -56,14 +43,14 @@ fun NasaImageSearchDetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun topAppBar(onNavigateBackClicked: () -> Unit) {
+private fun topAppBar(onNavigateBackClick: () -> Unit) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = R.string.image_details_screen_topbar_title)) },
         navigationIcon = {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
                 contentDescription = stringResource(id = R.string.image_details_screen_topbar_navigation_icon_contentDescription),
-                modifier = Modifier.clickable(onClick = onNavigateBackClicked)
+                modifier = Modifier.clickable(onClick = onNavigateBackClick)
             )
         }
     )
@@ -86,6 +73,7 @@ private fun content(
             errorButtonText = stringResource(id = R.string.image_details_screen_error_button_text),
             errorButtonAction = errorButtonAction
         )
+
         NasaImageSearchDetailsViewModel.UiState.Loading -> LoadingView()
         is NasaImageSearchDetailsViewModel.UiState.Success -> uiState.showDetails(
             modifier = modifier
@@ -112,14 +100,5 @@ private fun NasaImageSearchDetailsViewModel.UiState.Success.showDetails(modifier
                 style = Typography.bodyLarge
             )
         }
-    }
-}
-
-private fun handleEvent(
-    event: NasaImageSearchDetailsViewModel.Event,
-    navigator: DestinationsNavigator
-) {
-    when (event) {
-        NasaImageSearchDetailsViewModel.Event.NavigateBack -> navigator.popBackStack()
     }
 }

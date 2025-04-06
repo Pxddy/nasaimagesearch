@@ -20,10 +20,11 @@ object NasaImageSearchExternalModule {
     @Provides
     fun provideNasaImageSearchApi(
         client: OkHttpClient,
+        json: Json,
     ): NasaImageSearchApi = Retrofit.Builder()
         .baseUrl("https://images-api.nasa.gov/")
         .client(client)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create()
 }

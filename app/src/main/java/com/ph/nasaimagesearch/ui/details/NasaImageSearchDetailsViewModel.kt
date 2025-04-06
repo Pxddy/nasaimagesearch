@@ -4,20 +4,19 @@ import androidx.core.text.parseAsHtml
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.common.coroutines.dispatcher.DispatcherProvider
 import com.ph.nasaimagesearch.common.time.toLongDateFormat
 import com.ph.nasaimagesearch.core.model.NasaImage
-import com.ph.nasaimagesearch.ui.destinations.NasaImageSearchDetailsScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import java.time.Instant
 import javax.inject.Inject
+import kotlin.reflect.typeOf
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
@@ -26,13 +25,12 @@ class NasaImageSearchDetailsViewModel @Inject constructor(
     dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
-    private val eventChannel = Channel<Event>(Channel.BUFFERED)
-    val events = eventChannel.receiveAsFlow()
+    private val image = savedStateHandle.toRoute<NasaImageSearchDetailsRoute>(
+        typeMap = mapOf(typeOf<NasaImage>() to NasaImageType),
+    ).image
 
-    val uiState: StateFlow<UiState> = flow {
-        val image = NasaImageSearchDetailsScreenDestination.argsFrom(savedStateHandle).image
-        emit(image.toUiState())
-    }
+    val uiState: StateFlow<UiState> = flow { emit(image) }
+        .map { it.toUiState() }
         .catch { cause ->
             Timber.e(cause, "Failed create UiState")
             emit(UiState.Error)
@@ -42,15 +40,6 @@ class NasaImageSearchDetailsViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
             initialValue = UiState.Loading
         )
-
-    fun onNavigateBack() = viewModelScope.launch {
-        Timber.d("onNavigateBack()")
-        eventChannel.send(Event.NavigateBack)
-    }
-
-    sealed interface Event {
-        data object NavigateBack : Event
-    }
 
     sealed interface UiState {
         data object Loading : UiState
