@@ -15,7 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.ph.nasaimagesearch.R
 import com.ph.nasaimagesearch.ui.composables.ErrorButtonAction
 import com.ph.nasaimagesearch.ui.composables.ErrorView

@@ -15,6 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.plus
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @Singleton
 class NetworkStateProvider @Inject constructor(
@@ -69,7 +70,8 @@ class NetworkStateProvider @Inject constructor(
         .onEach { Timber.v("isOnline: $it") }
         .shareIn(
             scope = appScope,
-            started = SharingStarted.WhileSubscribed(replayExpiration = Duration.ZERO),
+            started = SharingStarted.WhileSubscribed(stopTimeout = 1.seconds, replayExpiration = Duration.ZERO),
+            replay = 1,
         )
 
     private fun ConnectivityManager.filterActiveNetworksByCapability(): Set<Network> = listOfNotNull(activeNetwork)
