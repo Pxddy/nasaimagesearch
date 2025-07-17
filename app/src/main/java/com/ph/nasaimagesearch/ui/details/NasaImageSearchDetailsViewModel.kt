@@ -10,9 +10,10 @@ import com.ph.nasaimagesearch.common.coroutines.dispatcher.DispatcherProvider
 import com.ph.nasaimagesearch.common.time.toLongDateFormat
 import com.ph.nasaimagesearch.core.model.NasaImage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.plus
-import okhttp3.internal.toImmutableList
 import timber.log.Timber
 import java.time.Instant
 import javax.inject.Inject
@@ -47,7 +48,7 @@ class NasaImageSearchDetailsViewModel @Inject constructor(
         data class Success(
             val title: String,
             val imageUrl: String,
-            val data: List<Pair<Int, String>>
+            val data: ImmutableList<Pair<Int, String>>
         ) : UiState
     }
 }
