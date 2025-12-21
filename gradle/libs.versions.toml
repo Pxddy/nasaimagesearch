@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.2"
-activityCompose = "1.12.1"
+activityCompose = "1.12.2"
 androidDesugarJdkLibs = "2.1.5"
 androidxHiltNavigationCompose = "1.3.0"
 androidxLifecycle = "2.10.0"
