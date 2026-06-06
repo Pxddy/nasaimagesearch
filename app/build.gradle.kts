@@ -10,14 +10,14 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     namespace = "com.ph.nasaimagesearch"
 
     defaultConfig {
         applicationId = "com.ph.nasaimagesearch"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
 
