@@ -9,6 +9,10 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 android {
     compileSdk = 37
 
@@ -57,10 +61,6 @@ android {
                 "-opt-in=kotlin.ExperimentalStdlibApi"
             )
         }
-    }
-
-    hilt {
-        enableAggregatingTask = true
     }
 
     buildFeatures {
