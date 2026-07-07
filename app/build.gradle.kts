@@ -99,8 +99,6 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    // Temporary fix, see https://github.com/google/dagger/issues/5204
-    compileOnly("com.google.errorprone:error_prone_annotations:2.50.0")
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.collections.immutable)
