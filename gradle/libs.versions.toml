@@ -16,7 +16,7 @@ kotlinxCollectionsImmutable = "0.5.1"
 kotlinxSerializationJson = "1.11.0"
 ksp = "2.3.11"
 lottieCompose = "6.7.1"
-okhttp = "5.4.0"
+okhttp = "5.5.0"
 squareRetrofitBom = "3.0.0"
 timber = "5.0.1"
 
